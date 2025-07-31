@@ -16,7 +16,7 @@ def save_fish_image(user_id: str, fish_img: bytes) -> str:
   return fish_path
   
 def generate_fish_image(user_id, ans):
-  result = generate_fish_image(ans)
+  result = generate_fish(ans)
   save_fish_image(user_id, result)
   return result
 
