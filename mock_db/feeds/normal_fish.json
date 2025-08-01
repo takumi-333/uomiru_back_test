@@ -1,0 +1,6 @@
+{
+  "id": "normal_fish",
+  "name": "サカナ",
+  "feature": "ただの魚",
+  "img_path": "./storage/feed/normalfish.png"
+}

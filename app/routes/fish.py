@@ -23,19 +23,15 @@ def generate():
 
 @fish_bp.route("/evolve", methods=["POST"])
 def evolve():
-  target_img = request.files.get("target_img")
-  feed_img = request.files.get("feed_img")
-  feed_data_raw = request.form.get("feed_data")
-
-  if not (target_img and feed_img and feed_data_raw):
-    return jsonify({"error": "必要なデータが足りません"}), 400
-
-  try:
-    feed_data = json.loads(feed_data_raw)
-  except json.JSONDecodeError:
-    return jsonify({"error": "feed_dataが不正です"}), 400
-
-  result_img = evolve_fish_image(target_img, feed_img, feed_data)
+  user_id = session.get("user_id")
+  if not user_id:
+    return jsonify({"error": "ログインが必要です"}), 401
+  
+  feed_id = request.form.get("feed_id")
+  if not feed_id:
+    return jsonify({"error": "feed_idが必要です"}), 400
+  
+  result_img = evolve_fish_image(user_id, feed_id)
   output_io = BytesIO(result_img)
   output_io.seek(0)
   return send_file(output_io, mimetype='image/png'), 201
