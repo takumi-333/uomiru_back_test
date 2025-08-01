@@ -12,3 +12,10 @@ def get_all_feeds():
         feeds.append(feed_data)
   
   return feeds
+
+def get_feed_img_by_path(path):
+  if not os.path.exists(path):
+    return None
+  with open(path, "rb") as f:
+    return f.read()
+  

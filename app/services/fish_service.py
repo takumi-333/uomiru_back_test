@@ -4,7 +4,7 @@ import os
 
 def generate_fish(ans) -> bytes:
   # 将来的に生成AIを呼び出す処理へと変更
-  with open("./static/shark.png",  "rb") as f:
+  with open("./static/fish.png",  "rb") as f:
     fish_data = f.read()
   return remove(fish_data)
 

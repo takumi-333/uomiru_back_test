@@ -12,9 +12,11 @@ def create_app():
   from .routes.auth import auth_bp
   from .routes.fish import fish_bp
   from .routes.user import user_bp
+  from .routes.feed import feed_bp
 
   app.register_blueprint(auth_bp)
   app.register_blueprint(fish_bp)
   app.register_blueprint(user_bp)
+  app.register_blueprint(feed_bp)
 
   return app
