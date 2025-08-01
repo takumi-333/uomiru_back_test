@@ -4,12 +4,12 @@ import os
 
 def generate_fish(ans) -> bytes:
   # 将来的に生成AIを呼び出す処理へと変更
-  with open("./static/fish.png",  "rb") as f:
+  with open("./static/shark.png",  "rb") as f:
     fish_data = f.read()
   return remove(fish_data)
 
 def save_fish_image(user_id: str, fish_img: bytes) -> str:
-  fish_path = f"./mock_db/fish/{user_id}.png"
+  fish_path = f"./storage/fish/{user_id}.png"
   with open(fish_path, "wb") as f:
     f.write(fish_img)
   save_user_fish_path(user_id, fish_path)
