@@ -9,12 +9,12 @@ class UserRepository(IUserRepository):
     return os.path.join(USER_DIR, f"{user_id}.json")
   
   def create(self, user: User) -> bool:
-    path = self._get_path(user.user_id)
+    path = self._get_path(user.id)
     if os.path.exists(path):
       return False
     with open(path, "w") as f:
       json.dump({
-        "user_id": user.user_id,
+        "user_id": user.id,
         "hashed_pass": user.hashed_pass,
         "my_fish_path": user.my_fish_path
       }, f)
