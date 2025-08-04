@@ -14,7 +14,7 @@ class UserRepository(IUserRepository):
       return False
     with open(path, "w") as f:
       json.dump({
-        "user_id": user.id,
+        "id": user.id,
         "hashed_pass": user.hashed_pass,
         "my_fish_path": user.my_fish_path
       }, f)
@@ -33,7 +33,7 @@ class UserRepository(IUserRepository):
       return None
     with open(path) as f:
       data = json.load(f)
-    return User(data["user_id"], data["hashed_pass"], data.get("my_fish_path", ""))
+    return User(data["id"], data["hashed_pass"], data.get("my_fish_path", ""))
   
   def verify_password(self, user_id: str, password: str) -> bool:
     user = self.find_by_id(user_id)
