@@ -1,4 +1,3 @@
-from rembg import remove
 import os
 import json
 

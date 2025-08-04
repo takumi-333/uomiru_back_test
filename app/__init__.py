@@ -9,12 +9,10 @@ def create_app():
   CORS(app, supports_credentials=True)
 
   # Blueprint登録
-  from .routes.auth import auth_bp
-  from .routes.fish import fish_bp
-  from .routes.user import user_bp
-  from .routes.feed import feed_bp
+  from .routes.feed_route import feed_bp
+  from .routes.fish_route import fish_bp
+  from .routes.user_route import user_bp
 
-  app.register_blueprint(auth_bp)
   app.register_blueprint(fish_bp)
   app.register_blueprint(user_bp)
   app.register_blueprint(feed_bp)
