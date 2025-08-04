@@ -21,7 +21,7 @@ class UserUsecase:
     user = self.repo.find_by_id(user_id)
     if user:
       return {
-        "user_id": user.user_id,
+        "user_id": user.id,
         "my_fish_path": user.my_fish_path
       }
     return None
