@@ -7,5 +7,5 @@ class IFishRepository(ABC):
     pass
 
   @abstractmethod
-  def load(self, user_id: str) -> Fish:
+  def load(self, user_id: str, path: str) -> Fish:
     pass
