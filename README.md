@@ -10,10 +10,10 @@ Docker上で起動できる環境を提供しています。
 1. dockerイメージをbuild
   `flask-app`の部分は任意のタグをつけられます
 ```cli
-docker build -t flask-app .
+docker-compose build --no-
 ```
 
 2. dockerイメージからコンテナを起動
 ```cli
-docker run -p 5000:5000 flask-app
+docker-compose up
 ```

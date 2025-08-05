@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  backend:
+    build: . #Dockerfileからビルド
+    container_name: uomiru-backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db # DBサービスに依存
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=pass123
+      - DB_NAME=uomiru
+    volumes:
+      - .:/app
+    networks:
+      - uomiru_net
+  
+  db:
+    image: mysql:8.0
+    container_name: uomiru-mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: pass123
+      MYSQL_DATABASE: uomiru
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - uomiru_net
+
+volumes:
+  mysql_data:
+
+networks:
+  uomiru_net:

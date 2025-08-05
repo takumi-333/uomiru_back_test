@@ -1,6 +1,8 @@
 import os, json, bcrypt
 from app.domain.entities.user import User
 from app.domain.repositories.user_repository import IUserRepository
+from app.infrastructure.db.models import UserModel
+from app.infrastructure.db.base import db
 
 USER_DIR = "./mock_db/users"
 
@@ -9,41 +11,47 @@ class UserRepository(IUserRepository):
     return os.path.join(USER_DIR, f"{user_id}.json")
   
   def create(self, user: User) -> bool:
-    path = self._get_path(user.id)
-    if os.path.exists(path):
+    # すでにidが同じユーザが存在するか確認
+    existing = UserModel.query.filter_by(id=user.id).first()
+    if existing:
       return False
-    with open(path, "w") as f:
-      json.dump({
-        "id": user.id,
-        "hashed_pass": user.hashed_pass,
-        "my_fish_path": user.my_fish_path
-      }, f)
+    
+    model = UserModel(
+      id=user.id,
+      hashed_pass=user.hashed_pass,
+      my_fish_path=""
+    )
+    db.session.add(model)
+    db.session.commit()
     return True
   
   def delete(self, user_id: str) -> bool:
-    path = self._get_path(user_id)
-    if os.path.exists(path):
-      os.remove(path)
-      return True
-    return False
+    model = UserModel.query.filter_by(id=user_id).first()
+    if not model:
+      return False
+    db.session.delete(model)
+    db.session.commit()
+    return True
   
   def find_by_id(self, user_id: str) -> User | None:
-    path = self._get_path(user_id)
-    if not os.path.exists(path):
+    model = UserModel.query.filter_by(id=user_id).first()
+    if not model:
       return None
-    with open(path) as f:
-      data = json.load(f)
-    return User(data["id"], data["hashed_pass"], data.get("my_fish_path", ""))
+    return User(
+      user_id=model.id,
+      hashed_pass=model.hashed_pass,
+      my_fish_path=model.my_fish_path
+    )
   
   def verify_password(self, user_id: str, password: str) -> bool:
-    user = self.find_by_id(user_id)
-    if not user:
+    model = UserModel.query.filter_by(id=user_id).first()
+    if not model:
       return False
-    return bcrypt.checkpw(password.encode(), user.hashed_pass.encode())
+    return bcrypt.checkpw(password.encode(), model.hashed_pass.encode())
   
   def save_fish_path(self, user_id: str, path: str):
-    user = self.find_by_id(user_id)
-    if not user:
+    model = UserModel.query.filter_by(id=user_id).first()
+    if not model:
       return
-    user.my_fish_path = path
-    self.create(user)
+    model.my_fish_path = path
+    db.session.commit()

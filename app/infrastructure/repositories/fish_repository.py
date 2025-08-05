@@ -9,8 +9,7 @@ class FishRepository(IFishRepository):
       f.write(fish.image_bytes)
     return path
   
-  def load(self, user_id: str) -> Fish:
-    path = f"./storage/fish/{user_id}.png"
+  def load(self, user_id: str, path: str) -> Fish:
     if not os.path.exists(path):
       raise FileNotFoundError("Fish not found")
     
