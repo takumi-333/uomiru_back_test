@@ -1,3 +1,4 @@
+```mermaid
 erDiagram
     USERS {
         string id PK
@@ -20,3 +21,4 @@ erDiagram
     }
 
     USERS ||--|| FISH : "has"
+```
