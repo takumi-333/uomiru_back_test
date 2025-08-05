@@ -22,6 +22,5 @@ class UserUsecase:
     if user:
       return {
         "id": user.id,
-        "my_fish_path": user.my_fish_path
       }
     return None

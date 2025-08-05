@@ -1,29 +1,32 @@
 from app.domain.repositories.fish_repository import IFishRepository
-from app.domain.repositories.user_repository import IUserRepository
 from app.domain.entities.fish import Fish
-from app.services.fish_manager import generate_image, evolve_image
+from app.services.fish_manager import generate_image, evolve_image, save_fish_image, load_fish_image
 
 class FishUsecase:
-  def __init__(self, fish_repo: IFishRepository, user_repo: IUserRepository):
+  def __init__(self, fish_repo: IFishRepository):
     self.fish_repo = fish_repo
-    self.user_repo = user_repo
   
   def generate_fish(self, user_id: str, ans: str) -> bytes:
     img_bytes = generate_image(ans)
-    fish = Fish(user_id, img_bytes)
-    path = self.fish_repo.save(fish)
-    self.user_repo.save_fish_path(user_id, path)
+    img_path = f"./storage/fish/{user_id}.png"
+    save_fish_image(img_bytes=img_bytes, path=img_path)
+    newFish = Fish(
+      img_path=img_path,
+      size=1,
+      user_id=user_id
+    )
+    self.fish_repo.create(newFish)
     return img_bytes
 
   def evolve_fish(self, user_id: str, id: str) -> bytes:
-    user = self.user_repo.find_by_id(user_id)
-    my_fish = self.fish_repo.load(user_id, user.my_fish_path)
-    evolved_fish_img = evolve_image(my_fish.image_bytes, id)
-    new_fish = Fish(user_id, evolved_fish_img)
-    self.fish_repo.save(new_fish)
+    fish = self.fish_repo.find_by_user_id(user_id)
+    my_fish_img = load_fish_image(fish.img_path)
+    evolved_fish_img = evolve_image(my_fish_img, id)
+    # size upの処理とか入れてもいいかも
+    save_fish_image(evolved_fish_img, fish.img_path)
     return evolved_fish_img
   
-  def get_fish_by_user_id(self, user_id: str) ->bytes:
-    user = self.user_repo.find_by_id(user_id)
-    my_fish = self.fish_repo.load(user_id, user.my_fish_path)
-    return my_fish.image_bytes
+  def get_fish_by_user_id(self, user_id: str) -> bytes:
+    fish = self.fish_repo.find_by_user_id(user_id)
+    my_fish = load_fish_image(fish.img_path)
+    return my_fish

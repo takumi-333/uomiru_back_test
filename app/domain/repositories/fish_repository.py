@@ -3,9 +3,9 @@ from app.domain.entities.fish import Fish
 
 class IFishRepository(ABC):
   @abstractmethod
-  def save(self, fish: Fish) -> str:
+  def create(self, fish: Fish) -> bool:
     pass
 
   @abstractmethod
-  def load(self, user_id: str, path: str) -> Fish:
+  def find_by_user_id(self, user_id: str) -> Fish | None:
     pass

@@ -2,9 +2,8 @@ from flask import request, session, jsonify, send_file
 from io import BytesIO
 from app.usecase.fish_usecase import FishUsecase
 from app.infrastructure.repositories.fish_repository import FishRepository
-from app.infrastructure.repositories.user_repository import UserRepository
 
-fish_usecase = FishUsecase(FishRepository(), UserRepository())
+fish_usecase = FishUsecase(FishRepository())
 
 def generate_fish_controller():
   user_id = session.get("user_id")

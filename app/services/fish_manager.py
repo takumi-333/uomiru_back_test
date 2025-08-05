@@ -1,4 +1,5 @@
 from rembg import remove
+import os
 
 def generate_image(ans: str) -> bytes:
   # 仮の処理
@@ -22,3 +23,15 @@ def evolve_image(original_img: bytes, id: str) -> bytes:
   else:
     fish_data = original_img
   return fish_data
+
+def load_fish_image(path: str) -> bytes:
+  if not os.path.exists(path):
+    raise FileNotFoundError("Fish not found")
+  
+  with open(path, "rb") as f:
+    return f.read() 
+    
+def save_fish_image(img_bytes: bytes, path: str):
+  with open(path, "wb") as f:
+    f.write(img_bytes)
+  return path
