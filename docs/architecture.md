@@ -11,11 +11,11 @@ graph LR
     C[(MySQL データベース)]
   end
 
-  subgraph AI[生成AIサービス]
+  subgraph AI[AI Service]
     D[画像生成API\n(魚の生成・進化)]
   end
 
-  subgraph Storage[ストレージ]
+  subgraph ST[Storage]
     E[(AWS S3\n魚画像ストレージ)]
   end
 
