@@ -19,7 +19,6 @@ graph LR
     E[(AWS S3\n魚画像ストレージ)]
   end
 
-  %% 接続
   A -->|HTTPS/REST| B
   B -->|SQL| C
   B -->|API呼び出し| D
