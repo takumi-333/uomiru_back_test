@@ -1,5 +1,6 @@
 from rembg import remove
 import os
+from app.domain.entities.feed import Feed
 
 def generate_image(ans: str) -> bytes:
   # 仮の処理
@@ -7,13 +8,13 @@ def generate_image(ans: str) -> bytes:
     img = f.read()
   return remove(img)
 
-def evolve_image(original_img: bytes, id: str) -> bytes:
+def evolve_image(original_img: bytes, feed: Feed) -> bytes:
   # 仮の処理
-  if (id == "chouchin"):
+  if (feed.name == "チョウチンアンコウ"):
     fish_path = "./static/fish2.png"
-  elif (id == "clownfish"):
+  elif (feed.name == "カクレクマノミ"):
     fish_path = "./static/fish3.png"
-  elif (id == "shark"):
+  elif (feed.name == "ホオジロザメ"):
     fish_path = "./static/fish4.png"
   else:
     fish_path = ""

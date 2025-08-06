@@ -8,5 +8,5 @@ class IFeedRepository(ABC):
     pass
 
   @abstractmethod
-  def get_image_by_path(self, path: str) -> bytes | None:
+  def find_by_id(self, id: int) -> Feed:
     pass

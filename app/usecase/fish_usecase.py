@@ -1,10 +1,12 @@
 from app.domain.repositories.fish_repository import IFishRepository
+from app.domain.repositories.feed_repository import IFeedRepository
 from app.domain.entities.fish import Fish
 from app.services.fish_manager import generate_image, evolve_image, save_fish_image, load_fish_image
 
 class FishUsecase:
-  def __init__(self, fish_repo: IFishRepository):
+  def __init__(self, fish_repo: IFishRepository, feed_repo: IFeedRepository):
     self.fish_repo = fish_repo
+    self.feed_repo = feed_repo
   
   def generate_fish(self, user_id: str, ans: str) -> bytes:
     img_bytes = generate_image(ans)
@@ -21,7 +23,8 @@ class FishUsecase:
   def evolve_fish(self, user_id: str, id: str) -> bytes:
     fish = self.fish_repo.find_by_user_id(user_id)
     my_fish_img = load_fish_image(fish.img_path)
-    evolved_fish_img = evolve_image(my_fish_img, id)
+    feed = self.feed_repo.find_by_id(id)
+    evolved_fish_img = evolve_image(my_fish_img, feed)
     # size upの処理とか入れてもいいかも
     save_fish_image(evolved_fish_img, fish.img_path)
     return evolved_fish_img
