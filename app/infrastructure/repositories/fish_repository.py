@@ -1,17 +1,28 @@
 import os
 from app.domain.entities.fish import Fish
 from app.domain.repositories.fish_repository import IFishRepository
+from app.infrastructure.db.models import FishModel
+from app.infrastructure.db.base import db
 
 class FishRepository(IFishRepository):
-  def save(self, fish: Fish) -> str:
-    path = f"./storage/fish/{fish.user_id}.png"
-    with open(path, "wb") as f:
-      f.write(fish.image_bytes)
-    return path
+  def create(self, fish: Fish) -> bool:
+    model = FishModel(
+      img_path=fish.img_path,
+      size=fish.size,
+      user_id=fish.user_id
+    )
+    db.session.add(model)
+    db.session.commit()
+    return True
   
-  def load(self, user_id: str, path: str) -> Fish:
-    if not os.path.exists(path):
-      raise FileNotFoundError("Fish not found")
+  def find_by_user_id(self, user_id: str) -> Fish | None:
+    model = FishModel.query.filter_by(user_id=user_id).first()
+    if not model:
+      return None
+    return Fish(
+      id=model.id,
+      img_path=model.img_path,
+      size=model.size,
+      user_id=model.user_id
+    )
     
-    with open(path, "rb") as f:
-      return Fish(user_id, f.read())

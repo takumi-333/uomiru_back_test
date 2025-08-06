@@ -17,7 +17,3 @@ class IUserRepository(ABC):
   @abstractmethod
   def verify_password(self, user_id: str, password: str) -> bool:
     pass
-
-  @abstractmethod
-  def save_fish_path(self, user_id: str, path: str):
-    pass

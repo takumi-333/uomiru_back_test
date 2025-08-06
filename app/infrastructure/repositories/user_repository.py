@@ -1,15 +1,10 @@
-import os, json, bcrypt
+import bcrypt
 from app.domain.entities.user import User
 from app.domain.repositories.user_repository import IUserRepository
 from app.infrastructure.db.models import UserModel
 from app.infrastructure.db.base import db
 
-USER_DIR = "./mock_db/users"
-
 class UserRepository(IUserRepository):
-  def _get_path(self, user_id):
-    return os.path.join(USER_DIR, f"{user_id}.json")
-  
   def create(self, user: User) -> bool:
     # すでにidが同じユーザが存在するか確認
     existing = UserModel.query.filter_by(id=user.id).first()
@@ -19,7 +14,6 @@ class UserRepository(IUserRepository):
     model = UserModel(
       id=user.id,
       hashed_pass=user.hashed_pass,
-      my_fish_path=""
     )
     db.session.add(model)
     db.session.commit()
@@ -40,7 +34,6 @@ class UserRepository(IUserRepository):
     return User(
       user_id=model.id,
       hashed_pass=model.hashed_pass,
-      my_fish_path=model.my_fish_path
     )
   
   def verify_password(self, user_id: str, password: str) -> bool:
@@ -49,9 +42,3 @@ class UserRepository(IUserRepository):
       return False
     return bcrypt.checkpw(password.encode(), model.hashed_pass.encode())
   
-  def save_fish_path(self, user_id: str, path: str):
-    model = UserModel.query.filter_by(id=user_id).first()
-    if not model:
-      return
-    model.my_fish_path = path
-    db.session.commit()

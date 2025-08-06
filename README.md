@@ -17,3 +17,9 @@ docker-compose build --no-
 ```cli
 docker-compose up
 ```
+
+## 餌情報をDBに登録
+コンテナを起動した状態で
+```cli
+docker exec -it -w /app uomiru-backend python -m app.init_db
+```
