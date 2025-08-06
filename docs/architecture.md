@@ -3,7 +3,7 @@
 ```mermaid
 graph LR
   subgraph FE[Frontend]
-    A[ユーザブラウザ<br>(Next.js ウオミルWebアプリ)]
+    A[ユーザブラウザ\n(Next.js ウオミルWebアプリ)]
   end
 
   subgraph BE[Backend]
@@ -12,11 +12,11 @@ graph LR
   end
 
   subgraph AI[生成AIサービス]
-    D[画像生成API<br>(魚の生成・進化)]
+    D[画像生成API\n(魚の生成・進化)]
   end
 
   subgraph Storage[ストレージ]
-    E[(AWS S3<br>魚画像ストレージ)]
+    E[(AWS S3\n魚画像ストレージ)]
   end
 
   %% 接続
@@ -24,5 +24,4 @@ graph LR
   B -->|SQL| C
   B -->|API呼び出し| D
   B -->|S3 API| E
-
 ```
